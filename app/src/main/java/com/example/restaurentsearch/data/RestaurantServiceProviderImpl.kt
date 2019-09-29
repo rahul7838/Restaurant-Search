@@ -1,7 +1,9 @@
 package com.example.restaurentsearch.data
 
+import com.example.restaurentsearch.data.model.RestaurantResponse
 import com.example.restaurentsearch.networking.RestaurantService
 import com.example.restaurentsearch.networking.RestaurentApiClient
+import io.reactivex.Single
 
 class RestaurantServiceProviderImpl : RestaurantServiceProvider {
 
@@ -14,10 +16,10 @@ class RestaurantServiceProviderImpl : RestaurantServiceProvider {
 
     }
 
-    override fun getRestaurantResponse(ll: String, intent: String) {
+    override fun getRestaurantResponse(ll: String, intent: String): Single<RestaurantResponse> {
         val restaurantService =
             RestaurentApiClient().getRetrofit().create(RestaurantService::class.java)
-        restaurantService.getRestaurantResponse(
+        return restaurantService.getRestaurantResponse(
             CLIENT_ID,
             CLIENT_SECRET,
             ll,
