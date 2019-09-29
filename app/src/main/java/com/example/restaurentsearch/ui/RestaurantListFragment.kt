@@ -1,13 +1,21 @@
 package com.example.restaurentsearch.ui
 
 import android.Manifest
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.restaurentsearch.BaseFragment
 import com.example.restaurentsearch.R
@@ -17,15 +25,27 @@ import com.example.restaurentsearch.data.model.Result
 import com.example.restaurentsearch.error.RestaurantErrorFragment
 import com.example.restaurentsearch.extension.replace
 import com.example.restaurentsearch.extension.visible
+import com.example.restaurentsearch.ui.locationrequest.LocationRequestFragment
 import kotlinx.android.synthetic.main.restaurant_list_fragment.*
 import javax.inject.Inject
 
-class RestaurantListFragment : BaseFragment(), RestaurantContract.View {
+class RestaurantListFragment : BaseFragment(), RestaurantContract.View, LocationListener {
+    override fun onLocationChanged(p0: Location?) {
+    }
+
+    override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
+    }
+
+    override fun onProviderEnabled(p0: String?) {
+    }
+
+    override fun onProviderDisabled(p0: String?) {
+    }
 
     private lateinit var adapter: RestaurantListAdapter
 
     @Inject
-    lateinit var restaurantPresenter: RestaurantPresenter
+    lateinit var restaurantPresenter: RestaurantContract.Presenter
 
 
     override fun showErrorScreen() {
@@ -35,7 +55,7 @@ class RestaurantListFragment : BaseFragment(), RestaurantContract.View {
 
     override fun showRestaurantList(restaurantList: ArrayList<Result>) {
         recycler_view_id.visible()
-        adapter.updateRestaurantList()
+        adapter.updateRestaurantList(restaurantList)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +79,8 @@ class RestaurantListFragment : BaseFragment(), RestaurantContract.View {
         checkPermissionAndExecute()
         adapter = RestaurantListAdapter()
         recycler_view_id.adapter = adapter
-        recycler_view_id.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        recycler_view_id.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     }
 
     private fun checkPermissionAndExecute() {
@@ -69,7 +90,7 @@ class RestaurantListFragment : BaseFragment(), RestaurantContract.View {
                     .executeWithPermissionCheck(
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         {
-                            restaurantPresenter.getRestaurantList()
+                            getCurrentLocation()
                         },
                         this::permissionDenialHandling
                     )
@@ -79,6 +100,33 @@ class RestaurantListFragment : BaseFragment(), RestaurantContract.View {
 
     private fun permissionDenialHandling(boolean: Boolean) {
         Toast.makeText(context, "permission denied", Toast.LENGTH_LONG).show()
+    }
+
+    private fun getCurrentLocation() {
+        val locationManager =
+            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val isGPSEnable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+
+        if (!isGPSEnable) {
+            replace(LocationRequestFragment.instance, R.id.container, false)
+        } else {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+                == PackageManager.PERMISSION_GRANTED
+            ) {
+                locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    60000, 10f, this
+                )
+                val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+
+                val latitude = location?.latitude.toString()
+                val longitude = location?.longitude.toString()
+                restaurantPresenter.getRestaurantList("$latitude,$longitude")
+            }
+        }
     }
 
 

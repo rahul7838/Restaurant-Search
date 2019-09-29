@@ -11,6 +11,6 @@ interface RestaurantContract {
     }
 
     interface Presenter : BaseContract.BasePresenter<View> {
-        fun getRestaurantList()
+        fun getRestaurantList(ll: String)
     }
 }

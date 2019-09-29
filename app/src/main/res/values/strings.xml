@@ -2,4 +2,6 @@
     <string name="app_name">Restaurent Search</string>
     <string name="btn_retry">RETRY</string>
     <string name="error_text">Could not connect to the Internet. Please check your network.</string>
+    <string name="turn_on">TURN ON LOCATION SERVICE</string>
+    <string name="location_explanation">Enable your location to find restaurant nearby.</string>
 </resources>

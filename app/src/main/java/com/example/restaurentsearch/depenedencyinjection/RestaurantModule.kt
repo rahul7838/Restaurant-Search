@@ -2,6 +2,7 @@ package com.example.restaurentsearch.depenedencyinjection
 
 import com.example.restaurentsearch.data.RestaurantServiceProvider
 import com.example.restaurentsearch.data.RestaurantServiceProviderImpl
+import com.example.restaurentsearch.ui.RestaurantContract
 import com.example.restaurentsearch.ui.RestaurantPresenter
 import dagger.Module
 import dagger.Provides
@@ -15,7 +16,7 @@ class RestaurantModule {
     }
 
     @Provides
-    fun provideRestaurantPresenter(restaurantServiceProvider: RestaurantServiceProvider): RestaurantPresenter {
+    fun provideRestaurantPresenter(restaurantServiceProvider: RestaurantServiceProvider): RestaurantContract.Presenter {
         return RestaurantPresenter(restaurantServiceProvider)
     }
 }
