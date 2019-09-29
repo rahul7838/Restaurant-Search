@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Restaurent Search</string>
+    <string name="btn_retry">RETRY</string>
+    <string name="error_text">Could not connect to the Internet. Please check your network.</string>
 </resources>

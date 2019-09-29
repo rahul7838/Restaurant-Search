@@ -3,6 +3,7 @@ package com.example.restaurentsearch
 import androidx.annotation.CallSuper
 import io.reactivex.disposables.CompositeDisposable
 
+
 interface BaseContract {
 
     interface BaseView {
