@@ -1,18 +1,30 @@
 package com.example.restaurentsearch.ui
 
+import android.Manifest
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.restaurentsearch.BaseFragment
 import com.example.restaurentsearch.R
 import com.example.restaurentsearch.RestaurantApplication
+import com.example.restaurentsearch.component.PermissionFragment
 import com.example.restaurentsearch.data.model.Result
 import com.example.restaurentsearch.error.RestaurantErrorFragment
 import com.example.restaurentsearch.extension.replace
+import kotlinx.android.synthetic.main.restaurant_list_fragment.*
 import javax.inject.Inject
 
 class RestaurantListFragment : BaseFragment(), RestaurantContract.View {
+
+    private lateinit var adapter: RestaurantListAdapter
+
+    @Inject
+    lateinit var restaurantPresenter: RestaurantPresenter
+
 
     override fun showErrorScreen() {
         val restaurantErrorFragment = RestaurantErrorFragment.instance()
@@ -20,11 +32,8 @@ class RestaurantListFragment : BaseFragment(), RestaurantContract.View {
     }
 
     override fun showRestaurantList(restaurantList: ArrayList<Result>) {
-//        TODO
+        adapter.updateRestaurantList()
     }
-
-    @Inject
-    lateinit var restaurantPresenter: RestaurantPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,19 +46,45 @@ class RestaurantListFragment : BaseFragment(), RestaurantContract.View {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        return LayoutInflater.from(inflater.context).inflate(R.layout.restaurant_list_fragment, container, false)
+        return LayoutInflater.from(inflater.context)
+            .inflate(R.layout.restaurant_list_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         restaurantPresenter.attachView(this)
-        restaurantPresenter.getRestaurantList()
+        checkPermissionAndExecute()
+        adapter = RestaurantListAdapter()
+        recycler_view_id.adapter = adapter
+        recycler_view_id.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     }
 
+    private fun checkPermissionAndExecute() {
+        activity?.let {
+            Handler(Looper.getMainLooper()).post {
+                PermissionFragment.getPermissionFragment(it)
+                    .executeWithPermissionCheck(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        {
+                            restaurantPresenter.getRestaurantList()
+                        },
+                        this::permissionDenialHandling
+                    )
+            }
+        }
+    }
+
+    private fun permissionDenialHandling(boolean: Boolean) {
+
+    }
 
 
     override fun onDestroy() {
         super.onDestroy()
         restaurantPresenter.detachView()
+    }
+
+    companion object {
+        val instance = RestaurantListFragment()
     }
 }

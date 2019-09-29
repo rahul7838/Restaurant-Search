@@ -24,7 +24,7 @@ class PermissionFragment : Fragment() {
                 fragment = PermissionFragment()
                 activity.supportFragmentManager.apply {
                     beginTransaction()
-                    .add(fragment, TAG)
+                        .add(fragment, TAG)
                         .commitAllowingStateLoss()
                     executePendingTransactions()
                 }
@@ -61,11 +61,11 @@ class PermissionFragment : Fragment() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if(requestCode != PERMISSION_REQUEST_CODE) {
+        if (requestCode != PERMISSION_REQUEST_CODE) {
             return
         }
 
-        if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             pendingJob?.invoke()
         } else {
             val neverAskAgain = !shouldShowRequestPermissionRationale(permissions[0])

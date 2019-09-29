@@ -16,8 +16,8 @@ class RestaurantPresenter(private val restaurantServiceProvider: RestaurantServi
     override var compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     override fun getRestaurantList() {
+        view?.showLoading()
         restaurantServiceProvider.getRestaurantResponse("dummy", "restaurant")
-            .doOnSubscribe { view?.showLoading() }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ success -> handleSuccessResult(success) },
