@@ -44,7 +44,7 @@ class PermissionFragment : Fragment() {
         job: () -> Unit,
         onNotGranted: (Boolean) -> Unit
     ) {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M || isGranted(permission)) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M && isGranted(permission))  {
             job.invoke()
         } else {
             pendingJob = job

@@ -7,6 +7,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.restaurentsearch.BaseFragment
 import com.example.restaurentsearch.R
@@ -15,6 +16,7 @@ import com.example.restaurentsearch.component.PermissionFragment
 import com.example.restaurentsearch.data.model.Result
 import com.example.restaurentsearch.error.RestaurantErrorFragment
 import com.example.restaurentsearch.extension.replace
+import com.example.restaurentsearch.extension.visible
 import kotlinx.android.synthetic.main.restaurant_list_fragment.*
 import javax.inject.Inject
 
@@ -32,6 +34,7 @@ class RestaurantListFragment : BaseFragment(), RestaurantContract.View {
     }
 
     override fun showRestaurantList(restaurantList: ArrayList<Result>) {
+        recycler_view_id.visible()
         adapter.updateRestaurantList()
     }
 
@@ -75,7 +78,7 @@ class RestaurantListFragment : BaseFragment(), RestaurantContract.View {
     }
 
     private fun permissionDenialHandling(boolean: Boolean) {
-
+        Toast.makeText(context, "permission denied", Toast.LENGTH_LONG).show()
     }
 
 
