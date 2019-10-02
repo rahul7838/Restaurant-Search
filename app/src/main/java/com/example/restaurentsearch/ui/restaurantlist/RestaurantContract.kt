@@ -1,4 +1,4 @@
-package com.example.restaurentsearch.ui
+package com.example.restaurentsearch.ui.restaurantlist
 
 import com.example.restaurentsearch.BaseContract
 import com.example.restaurentsearch.data.model.Result
@@ -6,7 +6,7 @@ import com.example.restaurentsearch.data.model.Result
 interface RestaurantContract {
 
     interface View : BaseContract.BaseView {
-        fun showRestaurantList(restaurantList: ArrayList<Result>)
+        fun filterRestaurantList(restaurantList: ArrayList<Result>)
         fun showErrorScreen()
     }
 

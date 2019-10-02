@@ -1,6 +1,7 @@
 package com.example.restaurentsearch.networking
 
 import com.example.restaurentsearch.data.model.RestaurantResponse
+import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -13,5 +14,5 @@ interface RestaurantService {
                               @Query("ll")ll: String,
                               @Query("intent")intent: String,
                               @Query("limit")limit: String,
-                              @Query("v")version: String): Single<RestaurantResponse>
+                              @Query("v")version: String): Observable<RestaurantResponse>
 }

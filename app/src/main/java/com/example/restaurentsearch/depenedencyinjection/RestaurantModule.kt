@@ -1,9 +1,11 @@
 package com.example.restaurentsearch.depenedencyinjection
 
+import android.content.Context
+import com.example.restaurentsearch.data.DBRepository
 import com.example.restaurentsearch.data.RestaurantServiceProvider
 import com.example.restaurentsearch.data.RestaurantServiceProviderImpl
-import com.example.restaurentsearch.ui.RestaurantContract
-import com.example.restaurentsearch.ui.RestaurantPresenter
+import com.example.restaurentsearch.ui.restaurantlist.RestaurantContract
+import com.example.restaurentsearch.ui.restaurantlist.RestaurantListPresenter
 import dagger.Module
 import dagger.Provides
 
@@ -16,7 +18,13 @@ class RestaurantModule {
     }
 
     @Provides
-    fun provideRestaurantPresenter(restaurantServiceProvider: RestaurantServiceProvider): RestaurantContract.Presenter {
-        return RestaurantPresenter(restaurantServiceProvider)
+    fun provideRestaurantPresenter(restaurantServiceProvider: RestaurantServiceProvider, dbRepository: DBRepository): RestaurantContract.Presenter {
+        return RestaurantListPresenter(
+            restaurantServiceProvider, dbRepository)
+    }
+
+    @Provides
+    fun provideDbRepo(context: Context): DBRepository {
+        return DBRepository(context)
     }
 }
