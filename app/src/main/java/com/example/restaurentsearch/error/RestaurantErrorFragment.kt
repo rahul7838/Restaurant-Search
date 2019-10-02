@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.restaurentsearch.R
 import com.example.restaurentsearch.extension.replace
-import com.example.restaurentsearch.ui.RestaurantListFragment
+import com.example.restaurentsearch.ui.restaurantlist.RestaurantListFragment
 import kotlinx.android.synthetic.main.restaurant_error.*
 
 class RestaurantErrorFragment : Fragment() {

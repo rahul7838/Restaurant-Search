@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.example.restaurentsearch.R
 import com.example.restaurentsearch.error.RestaurantErrorFragment
 import com.example.restaurentsearch.extension.add
+import com.example.restaurentsearch.ui.restaurantlist.RestaurantListFragment
 import com.example.restaurentsearch.util.isNetworkAvailable
 
 class RestaurantActivity : AppCompatActivity() {
@@ -14,11 +15,9 @@ class RestaurantActivity : AppCompatActivity() {
         setContentView(R.layout.restaurant_activity_main)
 
         if (isNetworkAvailable(context = this)) {
-            val restaurantFragment = RestaurantListFragment()
-            add(restaurantFragment, R.id.container, false)
+            add(RestaurantListFragment.instance, R.id.container, false)
         } else {
-            val restaurantErrorFragment = RestaurantErrorFragment()
-            add(restaurantErrorFragment, R.id.container, false)
+            add(RestaurantErrorFragment.instance(), R.id.container, false)
         }
     }
 

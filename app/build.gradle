@@ -75,4 +75,6 @@ dependencies {
     // https://mvnrepository.com/artifact/com.squareup.retrofit2/adapter-rxjava2
     implementation group: 'com.squareup.retrofit2', name: 'adapter-rxjava2', version: '2.6.1'
 
+//    stetho
+    implementation 'com.facebook.stetho:stetho:1.5.1'
 }
